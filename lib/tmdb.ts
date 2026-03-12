@@ -35,3 +35,12 @@ export async function discoverMovies(genre?: string, query?: string) {
 
   return data.results
 }
+
+export async function getGenres() {
+  const res = await fetch(
+    `${BASE_URL}/genre/movie/list?api_key=${API_KEY}`
+  )
+
+  const data = await res.json()
+  return data.genres
+}
