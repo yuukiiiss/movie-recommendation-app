@@ -1,3 +1,4 @@
+import Link from "next/link"
 import Image from "next/image"
 
 type Movie = {
@@ -11,19 +12,20 @@ export default function MovieCard({ movie }: { movie: Movie }) {
   const imageUrl = `https://image.tmdb.org/t/p/w500${movie.poster_path}`
 
   return (
-    <div className="border rounded overflow-hidden">
-      <Image
-        src={imageUrl}
-        alt={movie.title}
-        width={500}
-        height={750}
-        className="w-full"
-      />
+    <Link href={`/movies/${movie.id}`}>
+      <div className="border rounded overflow-hidden hover:scale-[1.02] transition-transform duration-200 cursor-pointer">
+        <Image
+          src={imageUrl}
+          alt={movie.title}
+          width={500}
+          height={750}
+        />
 
-      <div className="p-3">
-        <h2 className="font-semibold">{movie.title}</h2>
-        <p>⭐ {movie.vote_average.toFixed(1)}</p>
+        <div className="p-4">
+          <h2 className="font-semibold">{movie.title}</h2>
+          <p>⭐ {movie.vote_average.toFixed(1)}</p>
+        </div>
       </div>
-    </div>
+    </Link>
   )
 }
