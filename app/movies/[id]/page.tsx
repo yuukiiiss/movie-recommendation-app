@@ -1,4 +1,5 @@
 import Image from "next/image"
+import { notFound } from "next/navigation"
 import { getMovieDetail } from "@/lib/tmdb"
 
 export default async function MovieDetailPage({
@@ -9,6 +10,10 @@ export default async function MovieDetailPage({
   const { id } = await params
 
   const movie = await getMovieDetail(id)
+
+  if (!movie || movie.success === false || movie.status_code) {
+    notFound()
+  }
 
   const imagePath = movie.poster_path || movie.backdrop_path
 
@@ -27,10 +32,12 @@ export default async function MovieDetailPage({
         )}
 
         <div>
-          <h1 className="text-4xl font-bold mb-4">{movie.title}</h1>
+          <h1 className="text-4xl font-bold mb-4">
+            {movie.title}
+          </h1>
 
           <p className="mb-2 text-lg">
-            ⭐ {movie.vote_average?.toFixed(1)}
+            ⭐ {movie.vote_average?.toFixed(1) ?? "N/A"}
           </p>
 
           <p className="text-gray-600 max-w-xl">
