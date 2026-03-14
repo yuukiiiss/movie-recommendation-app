@@ -1,5 +1,11 @@
 import { getTrendingMovies } from "@/lib/tmdb"
 import MovieCard from "@/components/MovieCard"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Trending Movies",
+  description: "Discover trending movies this week",
+}
 
 export default async function Home() {
   const movies = await getTrendingMovies()

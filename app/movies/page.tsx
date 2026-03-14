@@ -2,6 +2,12 @@ import { discoverMovies, getGenres } from "@/lib/tmdb"
 import MovieCard from "@/components/MovieCard"
 import MovieFilter from "@/components/MovieFilter"
 import GenreFilter from "@/components/GenreFilter"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "All Movies",
+  description: "Browse and search movies by genre",
+}
 
 export default async function MoviesPage({
   searchParams,
