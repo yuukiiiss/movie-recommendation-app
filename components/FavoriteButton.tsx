@@ -18,12 +18,23 @@ export default function FavoriteButton({
 
   const favorite = isFavorite(movie.id)
 
+  function handleClick(e: React.MouseEvent) {
+    e.preventDefault()
+
+    if (favorite) {
+      const ok = confirm(
+        `Remove "${movie.title}" from favorites?`
+      )
+
+      if (!ok) return
+    }
+
+    toggleFavorite(movie)
+  }
+
   return (
     <button
-      onClick={(e) => {
-        e.preventDefault() // supaya tidak trigger link navigation
-        toggleFavorite(movie)
-      }}
+      onClick={handleClick}
       className="absolute top-2 right-2 text-xl"
     >
       {favorite ? "❤️" : "🤍"}
