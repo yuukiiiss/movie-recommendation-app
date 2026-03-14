@@ -13,74 +13,60 @@ const FALLBACK_GENRES = [
   { id: 878, name: "Science Fiction" },
 ]
 
-export async function getTrendingMovies() {
-  try {
-    const res = await fetch(
-      `${BASE_URL}/trending/movie/week?api_key=${API_KEY}`
-    )
+async function fetchFromTMDB(url: string) {
+  const res = await fetch(url, { cache: "no-store" })
 
-    const data = await res.json()
-    return data.results || []
-  } catch (error) {
-    console.error("Trending fetch error:", error)
-    return []
+  if (!res.ok) {
+    throw new Error("TMDB request failed")
   }
+
+  return res.json()
+}
+
+export async function getTrendingMovies() {
+  const data = await fetchFromTMDB(
+    `${BASE_URL}/trending/movie/week?api_key=${API_KEY}`
+  )
+
+  return data.results || []
 }
 
 export async function getMovieDetail(id: string) {
-  try {
-    const res = await fetch(
-      `${BASE_URL}/movie/${id}?api_key=${API_KEY}`
-    )
+  const data = await fetchFromTMDB(
+    `${BASE_URL}/movie/${id}?api_key=${API_KEY}`
+  )
 
-    const data = await res.json()
-    return data
-  } catch (error) {
-    console.error("Detail fetch error:", error)
-    return null
-  }
+  return data
 }
 
 export async function discoverMovies(genre?: string, query?: string) {
-  try {
-    let url = `${BASE_URL}/discover/movie?api_key=${API_KEY}`
+  let url = `${BASE_URL}/discover/movie?api_key=${API_KEY}`
 
-    if (genre) {
-      url += `&with_genres=${genre}`
-    }
-
-    if (query) {
-      url = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}`
-    }
-
-    const res = await fetch(url)
-    const data = await res.json()
-
-    return data.results || []
-  } catch (error) {
-    console.error("Discover fetch error:", error)
-    return []
+  if (genre) {
+    url += `&with_genres=${genre}`
   }
+
+  if (query) {
+    url = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}`
+  }
+
+  const data = await fetchFromTMDB(url)
+
+  return data.results || []
 }
 
 export async function getGenres() {
   try {
-    const res = await fetch(
+    const data = await fetchFromTMDB(
       `${BASE_URL}/genre/movie/list?api_key=${API_KEY}`
     )
 
-    const data = await res.json()
-
-    // ⭐ jika API return kosong → pakai fallback
     if (!data.genres || data.genres.length === 0) {
       return FALLBACK_GENRES
     }
 
     return data.genres
-  } catch (error) {
-    console.error("Genre fetch error:", error)
-
-    // ⭐ offline / fetch gagal → pakai fallback
+  } catch {
     return FALLBACK_GENRES
   }
 }
