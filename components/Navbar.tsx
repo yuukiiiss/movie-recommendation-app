@@ -2,13 +2,16 @@ import Link from "next/link"
 
 export default function Navbar() {
   return (
-    <nav className="flex items-center justify-between p-4 border-b">
-      <h1 className="font-bold text-lg">MovieApp</h1>
+    <nav className="flex items-center gap-6 p-4 border-b">
+      <Link href="/" className="font-bold text-xl">
+        MovieApp
+      </Link>
 
-      <div className="flex gap-4">
-        <Link href="/">Home</Link>
-        <Link href="/movies">Movies</Link>
-      </div>
+      <Link href="/">Home</Link>
+
+      <Link href="/movies">Movies</Link>
+
+      <Link href="/favorites">Favorites</Link>
     </nav>
   )
 }

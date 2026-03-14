@@ -1,5 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
+import FavoriteButton from "./FavoriteButton"
 
 type Movie = {
   id: number
@@ -15,10 +16,11 @@ export default function MovieCard({ movie }: { movie: Movie }) {
 
   return (
     <Link href={`/movies/${movie.id}`}>
-      <div className="border rounded overflow-hidden hover:scale-[1.02] hover:shadow-xl transition-all duration-200 cursor-pointer">
+      <div className="relative border rounded overflow-hidden hover:scale-[1.02] hover:shadow-xl transition-all duration-200 cursor-pointer">
+
+        <FavoriteButton movie={movie} />
 
         <div className="w-full aspect-[2/3] bg-gray-100 flex items-center justify-center">
-
           {imageUrl && (
             <Image
               src={imageUrl}
@@ -28,7 +30,6 @@ export default function MovieCard({ movie }: { movie: Movie }) {
               className="object-cover w-full h-full"
             />
           )}
-
         </div>
 
         <div className="p-4">

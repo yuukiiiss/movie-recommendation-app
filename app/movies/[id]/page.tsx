@@ -1,6 +1,7 @@
 import Image from "next/image"
 import { notFound } from "next/navigation"
 import { getMovieDetail } from "@/lib/tmdb"
+import FavoriteButton from "@/components/FavoriteButton"
 
 export default async function MovieDetailPage({
   params,
@@ -21,15 +22,20 @@ export default async function MovieDetailPage({
     <main className="p-8">
       <div className="flex flex-col md:flex-row gap-8">
 
-        {imagePath && (
-          <Image
-            src={`https://image.tmdb.org/t/p/w500${imagePath}`}
-            alt={movie.title || "Movie image"}
-            width={500}
-            height={750}
-            className="rounded"
-          />
-        )}
+        <div className="relative">
+          {imagePath && (
+            <Image
+              src={`https://image.tmdb.org/t/p/w500${imagePath}`}
+              alt={movie.title || "Movie image"}
+              width={500}
+              height={750}
+              className="rounded"
+            />
+          )}
+
+          {/* ⭐ Favorite Button */}
+          <FavoriteButton movie={movie} />
+        </div>
 
         <div>
           <h1 className="text-4xl font-bold mb-4">
