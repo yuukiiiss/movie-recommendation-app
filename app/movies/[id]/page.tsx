@@ -1,7 +1,37 @@
 import Image from "next/image"
 import { notFound } from "next/navigation"
+import type { Metadata } from "next"
+
 import { getMovieDetail } from "@/lib/tmdb"
 import FavoriteButton from "@/components/FavoriteButton"
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}): Promise<Metadata> {
+  try {
+    const { id } = await params
+    const movie = await getMovieDetail(id)
+
+    if (!movie) {
+      return {
+        title: "Movie detail",
+        description: "Movie detail page",
+      }
+    }
+
+    return {
+      title: movie.title,
+      description: movie.overview || "Movie detail page",
+    }
+  } catch {
+    return {
+      title: "Movie detail",
+      description: "Movie detail page",
+    }
+  }
+}
 
 export default async function MovieDetailPage({
   params,
@@ -12,7 +42,7 @@ export default async function MovieDetailPage({
 
   const movie = await getMovieDetail(id)
 
-  if (!movie || movie.success === false || movie.status_code) {
+  if (!movie) {
     notFound()
   }
 
@@ -21,7 +51,6 @@ export default async function MovieDetailPage({
   return (
     <main className="p-8">
       <div className="flex flex-col md:flex-row gap-8">
-
         <div className="relative">
           {imagePath && (
             <Image
@@ -33,7 +62,6 @@ export default async function MovieDetailPage({
             />
           )}
 
-          {/* ⭐ Favorite Button */}
           <FavoriteButton movie={movie} />
         </div>
 
@@ -50,7 +78,6 @@ export default async function MovieDetailPage({
             {movie.overview}
           </p>
         </div>
-
       </div>
     </main>
   )
